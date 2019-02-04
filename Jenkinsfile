@@ -8,7 +8,7 @@ node {
     stage('Build image') {
         def dockerfile = 'Dockerfile'
         tag = Calendar.getInstance().getTime().format('YYYYMMdd-hhmm', TimeZone.getTimeZone('UTC'))
-        app = docker.build("tyhjataulu/go-blinker:${tag}", "-f ${dockerfile}")
+        app = docker.build("tyhjataulu/go-blinker:${tag}", "-f ${dockerfile} .")
     }
 
     stage('Push image') {
