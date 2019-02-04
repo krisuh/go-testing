@@ -1,34 +1,39 @@
 package main
 
-import "fmt"
-
-/*import (
-	"fmt"
+import (
+	"encoding/json"
+	"log"
+	"net/http"
 	"os"
-	"time"
 
-	rpio "github.com/stianeikeland/go-rpio"
+	"github.com/gorilla/mux"
 )
 
-// go get github.com/stianeikeland/go-rpio
-
-func main() {
-	if err := rpio.Open(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	defer rpio.Close()
-
-	pin.Output()
-
-	for x := 0; x < 20; x++ {
-		pin.Toggle()
-		time.Sleep(time.Second / 5)
-	}
+// Greeting represents the greeting
+type Greeting struct {
+	Message  string `json:"greeting"`
+	Hostname string `json:"hostname"`
 }
-*/
 
 func main() {
-	fmt.Println("Hello world")
+	router := mux.NewRouter()
+	router.HandleFunc("/api/greeting", GetGreeting).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+// GetGreeting responses with a greeting in json form.
+func GetGreeting(w http.ResponseWriter, r *http.Request) {
+	h, err := os.Hostname()
+	if err != nil {
+		log.Fatal("Could not get hostname!")
+		w.WriteHeader(500)
+	}
+	greeting := Greeting{
+		Message:  "Hello!",
+		Hostname: h,
+	}
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	encoder := json.NewEncoder(w)
+	encoder.Encode(greeting)
 }
