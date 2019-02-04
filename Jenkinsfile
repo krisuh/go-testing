@@ -24,11 +24,6 @@ node {
     }
 
     stage('Remove and prune images') {
-        def registryImageTag = "${registry}/${imageTag}"
-        def registruImageLatest = "${registry}/${name}:latest"
-        sh 'docker image rm "${imageTag}"'
-        sh 'docker image rm "${registryImageTag}"'
-        sh 'docker image rm "${registruImageLatest}"'
         sh 'docker image prune -f'
     }
 }
