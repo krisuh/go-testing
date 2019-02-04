@@ -1,10 +1,12 @@
 pipeline {
     agent any
     stages {
-        def app
-        def imageTag
         stage('Clone repository') {
             checkout scm
+        }
+
+        parameters {
+            string(name: 'imageTag')
         }
 
         stage('Build image') {
@@ -12,14 +14,16 @@ pipeline {
                 def dockerfile = 'Dockerfile'
                 def name = "tyhjataulu/go-blinker"
                 def tag = Calendar.getInstance().getTime().format('YYYYMMdd-hhmm', TimeZone.getTimeZone('UTC'))
-                imageTag = "${name}:${tag}"
-                app = docker.build(imageTag, "-f ${dockerfile} .")
+                def imageTag = "${name}:${tag}"
+                def app = docker.build(imageTag, "-f ${dockerfile} .")
+                env.imageTag = imageTag
             }
         }
 
         stage('Push image') {
             steps {
                 docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
+                    def app = docker.image(env.imageTag)
                     app.push()
                     app.push("latest")
                 }
@@ -28,7 +32,7 @@ pipeline {
 
         stage('Remove and prune images') {
             steps {
-                docker image rm "${imageTag}"
+                sh 'docker image rm "${env.imageTag}"'
                 docker image prune -f
             }
         }
