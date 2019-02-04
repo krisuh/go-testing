@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    def app
-    def imageTag
     stages {
+        def app
+        def imageTag
         stage('Clone repository') {
             checkout scm
         }
