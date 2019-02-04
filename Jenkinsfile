@@ -17,4 +17,8 @@ node {
             app.push("latest")
         }
     }
+
+    stage('Prune images') {
+        docker.images.Prune()
+    }
 }
