@@ -6,6 +6,5 @@ RUN GOARM=7 GOARCH=arm GOOS=linux go build -o blinker
 
 FROM arm32v6/alpine
 WORKDIR /app
-COPY edge-sensor /app/blinker
 COPY --from=compiler /app/blinker /app
 CMD ./blinker
