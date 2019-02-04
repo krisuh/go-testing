@@ -11,11 +11,11 @@ pipeline {
 
         stage('Build image') {
             steps {
-                def dockerfile = 'Dockerfile'
-                def name = "tyhjataulu/go-blinker"
-                def tag = Calendar.getInstance().getTime().format('YYYYMMdd-hhmm', TimeZone.getTimeZone('UTC'))
-                def imageTag = "${name}:${tag}"
-                def app = docker.build(imageTag, "-f ${dockerfile} .")
+                dockerfile = 'Dockerfile'
+                name = "tyhjataulu/go-blinker"
+                tag = Calendar.getInstance().getTime().format('YYYYMMdd-hhmm', TimeZone.getTimeZone('UTC'))
+                imageTag = "${name}:${tag}"
+                app = docker.build(imageTag, "-f ${dockerfile} .")
                 env.imageTag = imageTag
             }
         }
@@ -23,7 +23,7 @@ pipeline {
         stage('Push image') {
             steps {
                 docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
-                    def app = docker.image(env.imageTag)
+                    app = docker.image(env.imageTag)
                     app.push()
                     app.push("latest")
                 }
