@@ -1,12 +1,12 @@
 pipeline {
     agent any
+    
+    parameters {
+        string(name: 'imageTag')
+    }
     stages {
         stage('Clone repository') {
             checkout scm
-        }
-
-        parameters {
-            string(name: 'imageTag')
         }
 
         stage('Build image') {
