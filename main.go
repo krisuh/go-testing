@@ -13,6 +13,7 @@ import (
 type Greeting struct {
 	Message  string `json:"greeting"`
 	Hostname string `json:"hostname"`
+	Name     string `json:"name"`
 }
 
 func main() {
@@ -31,6 +32,7 @@ func GetGreeting(w http.ResponseWriter, r *http.Request) {
 	greeting := Greeting{
 		Message:  "Hello!",
 		Hostname: h,
+		Name:     "Another Hello!",
 	}
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
