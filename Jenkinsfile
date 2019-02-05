@@ -37,8 +37,10 @@ pipeline {
 
         stage('Remove and prune images') {
             steps {
-                sh 'docker image rm ${newImage.id} -f'
-                sh 'docker image prune -f'
+                script {
+                    sh "docker image rm ${newImage.id} -f"
+                    sh "docker image prune -f"
+                }
             }
         }
     }
