@@ -29,8 +29,10 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    newImage.push()
-                    newImage.push("latest")
+                    docker.withRegistry(registry, 'docker-hub-creds') {
+                        newImage.push()
+                        newImage.push("latest")
+                    }
                 }
             }
         }
