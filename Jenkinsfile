@@ -1,29 +1,45 @@
-node {
-    def app
-    def imageTag
-    def name = "tyhjataulu/go-blinker"
-    def registry = 'https://registry.hub.docker.com'
-    stage('Clone repository') {
-        checkout scm
-    }
+def registry = 'https://registry.hub.docker.com'
+def name = "tyhjataulu/go-blinker"
+def app
 
-    stage('Build image') {
-        dockerfile = 'Dockerfile'
-        tag = Calendar.getInstance().getTime().format('YYYYMMdd-hhmm', TimeZone.getTimeZone('UTC'))
-        imageTag = "${name}:${tag}"
-        app = docker.build(imageTag, "-f ${dockerfile} .")
-        env.imageTag = imageTag
-    }
-
-    stage('Push image') {
-        docker.withRegistry(registry, 'docker-hub-creds') {
-            app = docker.image(env.imageTag)
-            app.push()
-            app.push("latest")
+pipeline {
+    agent any
+    stages {
+        stage('Clone repository') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
         }
-    }
 
-    stage('Remove and prune images') {
-        sh 'docker image prune -f'
+        stage('Build image') {
+            steps {
+                script {
+                    def dockerfile = 'Dockerfile'
+                    def tag = Calendar.getInstance().getTime().format('YYYYMMdd-HHmm', TimeZone.getTimeZone('UTC'))
+                    def imageTag = "${name}:${tag}"
+                    app = docker.build(imageTag, "-f ${dockerfile} .")
+                }
+            }
+        }
+
+        stage('Push image') {
+            steps {
+                script {
+                    docker.withRegistry(registry, 'docker-hub-creds') {
+                        app = docker.image(env.imageTag)
+                        app.push()
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+
+        stage('Remove and prune images') {
+            steps {
+                sh 'docker image prune -f'
+            }
+        }
     }
 }
