@@ -1,6 +1,7 @@
 def registry = 'https://registry.hub.docker.com'
 def name = "tyhjataulu/go-blinker"
-def app
+def newImage
+def imageID
 
 pipeline {
     agent any
@@ -19,7 +20,8 @@ pipeline {
                     def dockerfile = 'Dockerfile'
                     def tag = Calendar.getInstance().getTime().format('YYYYMMdd-HHmm', TimeZone.getTimeZone('UTC'))
                     def imageTag = "${name}:${tag}"
-                    app = docker.build(imageTag, "-f ${dockerfile} .")
+                    newImage = docker.build(imageTag, "-f ${dockerfile} .")
+                    imageID = newImage.ID
                 }
             }
         }
@@ -27,16 +29,15 @@ pipeline {
         stage('Push image') {
             steps {
                 script {
-                    docker.withRegistry(registry, 'docker-hub-creds') {
-                        app.push()
-                        app.push("latest")
-                    }
+                    newImage.push()
+                    newImage.push("latest")
                 }
             }
         }
 
         stage('Remove and prune images') {
             steps {
+                sh 'docker image rm ${imageID}'
                 sh 'docker image prune -f'
             }
         }
