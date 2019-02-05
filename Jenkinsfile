@@ -28,7 +28,6 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry(registry, 'docker-hub-creds') {
-                        app = docker.image(env.imageTag)
                         app.push()
                         app.push("latest")
                     }
