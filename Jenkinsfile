@@ -21,7 +21,7 @@ pipeline {
                     def tag = Calendar.getInstance().getTime().format('YYYYMMdd-HHmm', TimeZone.getTimeZone('UTC'))
                     def imageTag = "${name}:${tag}"
                     newImage = docker.build(imageTag, "-f ${dockerfile} .")
-                    imageID = newImage.ID
+                    imageID = newImage.id
                 }
             }
         }
