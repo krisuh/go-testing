@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
+	rpio "github.com/stianeikeland/go-rpio"
 )
 
 // Greeting represents the greeting
@@ -17,6 +19,19 @@ type Greeting struct {
 }
 
 func main() {
+	err := rpio.Open()
+	if err != nil {
+		log.Printf("An error occurred while trying to connect GPIO pins: %s", err.Error())
+	} else {
+		pin := rpio.Pin(17)
+		defer rpio.Close()
+		pin.Output()
+		for i := 0; i < 25; i++ {
+			pin.Toggle()
+			time.Sleep(time.Second)
+		}
+	}
+
 	router := mux.NewRouter()
 	router.HandleFunc("/api/greeting", GetGreeting).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))

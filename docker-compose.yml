@@ -6,6 +6,8 @@ services:
     ports:
       - "8080:8080"
     deploy:
+      devices:
+        - "/dev/gpiomem:/dev/gpiomem"
       replicas: 2
       placement:
         constraints:
