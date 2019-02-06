@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/gorilla/mux"
 )
@@ -20,13 +18,12 @@ type Greeting struct {
 
 func main() {
 	log.Printf("Initializing software...")
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	router := mux.NewRouter()
 	router.HandleFunc("/api/greeting", GetGreeting).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", router))
-	msg := <-c
-	log.Printf("Ending process... %s \n", msg)
+	if err := http.ListenAndServe(":8080", router); err == http.ErrServerClosed {
+		log.Fatalf("Shutting down %s", err)
+	}
+
 }
 
 // GetGreeting responses with a greeting in json form.
