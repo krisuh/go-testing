@@ -24,6 +24,7 @@ func main() {
 
 // GetGreeting responses with a greeting in json form.
 func GetGreeting(w http.ResponseWriter, r *http.Request) {
+	log.Println("Received greeting request.")
 	h, err := os.Hostname()
 	if err != nil {
 		log.Fatal("Could not get hostname!")
