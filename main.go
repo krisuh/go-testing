@@ -22,6 +22,7 @@ var pin rpio.Pin
 var sleepTime time.Duration
 
 func main() {
+	log.Printf("Initializing software...")
 	err := rpio.Open()
 	sleepTime, _ = time.ParseDuration("5s")
 	if err != nil {
@@ -42,6 +43,7 @@ func GetGreeting(w http.ResponseWriter, r *http.Request) {
 	pin.High()
 	time.Sleep(sleepTime)
 	pin.Low()
+	log.Println("Shut down LED.")
 	h, err := os.Hostname()
 	if err != nil {
 		log.Fatal("Could not get hostname!")
