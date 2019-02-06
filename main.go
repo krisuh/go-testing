@@ -18,20 +18,19 @@ type Greeting struct {
 	Name     string `json:"name"`
 }
 
+var pin rpio.Pin
+var sleepTime time.Duration
+
 func main() {
 	err := rpio.Open()
+	sleepTime, _ = time.ParseDuration("5s")
 	if err != nil {
 		log.Printf("An error occurred while trying to connect GPIO pins: %s", err.Error())
 	} else {
-		pin := rpio.Pin(17)
+		pin = rpio.Pin(17)
 		defer rpio.Close()
 		pin.Output()
-		for i := 0; i < 25; i++ {
-			pin.Toggle()
-			time.Sleep(time.Second)
-		}
 	}
-
 	router := mux.NewRouter()
 	router.HandleFunc("/api/greeting", GetGreeting).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
@@ -40,6 +39,9 @@ func main() {
 // GetGreeting responses with a greeting in json form.
 func GetGreeting(w http.ResponseWriter, r *http.Request) {
 	log.Println("Received greeting request.")
+	pin.High()
+	time.Sleep(sleepTime)
+	pin.Low()
 	h, err := os.Hostname()
 	if err != nil {
 		log.Fatal("Could not get hostname!")
