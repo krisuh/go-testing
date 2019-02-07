@@ -7,7 +7,8 @@ services:
       - "8080:8080"
     privileged: true
     deploy:
-      replicas: 3
+      replicas: 2
       placement:
         constraints:
           - node.labels.location == edge
+          - node.labels.arch == arm

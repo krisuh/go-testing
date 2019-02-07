@@ -20,10 +20,7 @@ func main() {
 	log.Printf("Initializing software...")
 	router := mux.NewRouter()
 	router.HandleFunc("/api/greeting", GetGreeting).Methods("GET")
-	if err := http.ListenAndServe(":8080", router); err == http.ErrServerClosed {
-		log.Fatalf("Shutting down %s", err)
-	}
-
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 // GetGreeting responses with a greeting in json form.
