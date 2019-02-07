@@ -4,10 +4,10 @@ services:
     build: .
     image: tyhjataulu/go-blinker:latest
     ports:
-      - "8080:8080"
+      - 8080:8080
     privileged: true
     deploy:
-      replicas: 2
+      mode: global
       placement:
         constraints:
           - node.labels.location == edge
