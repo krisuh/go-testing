@@ -8,6 +8,11 @@ services:
     privileged: true
     deploy:
       mode: global
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 10M
       placement:
         constraints:
           - node.labels.location == edge
