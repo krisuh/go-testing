@@ -17,13 +17,3 @@ services:
         constraints:
           - node.labels.location == edge
           - node.labels.arch == arm
-
-  msg_broker:
-    image: eclipse-mosquitto:latest
-    ports:
-      - 1883:1883
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.hostname == raspi3
