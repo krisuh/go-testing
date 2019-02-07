@@ -21,4 +21,4 @@ services:
       mode: global
       placement:
         constraints:
-          - hostname == raspi3
+          - node.hostname == raspi3
