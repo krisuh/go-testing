@@ -22,8 +22,8 @@ pipeline {
                     def dockerfileArm = 'Dockerfile'
                     def dockerfileX86 = 'Dockerfile.x86'
                     def timestamp = Calendar.getInstance().getTime().format('YYYYMMdd-HHmm', TimeZone.getTimeZone('UTC'))
-                    armImageTag = "${name}:${tag}-arm"
-                    x86ImageTag = "${name}:${tag}-x86"
+                    armImageTag = "${name}:${timestamp}-arm"
+                    x86ImageTag = "${name}:${timestamp}-x86"
                     newArmImage = docker.build(armImageTag, "-f ${dockerfileArm} .")
                     newx86Image = docker.build(x86ImageTag, "-f ${dockerfileX86} .")
                 }
