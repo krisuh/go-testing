@@ -1,6 +1,9 @@
 def registry = 'https://registry.hub.docker.com'
 def name = "tyhjataulu/go-blinker"
-def newImage
+def newArmImage
+def newx86Image
+def armImageTag
+def x86ImageTag
 
 pipeline {
     agent any
@@ -13,24 +16,43 @@ pipeline {
             }
         }
 
-        stage('Build image') {
+        stage('Build images') {
             steps {
                 script {
-                    def dockerfile = 'Dockerfile'
-                    def tag = Calendar.getInstance().getTime().format('YYYYMMdd-HHmm', TimeZone.getTimeZone('UTC'))
-                    def imageTag = "${name}:${tag}"
-                    newImage = docker.build(imageTag, "-f ${dockerfile} .")
+                    def dockerfileArm = 'Dockerfile'
+                    def dockerfileX86 = 'Dockerfile.x86'
+                    def timestamp = Calendar.getInstance().getTime().format('YYYYMMdd-HHmm', TimeZone.getTimeZone('UTC'))
+                    armImageTag = "${name}:${tag}-arm"
+                    x86ImageTag = "${name}:${tag}-x86"
+                    newArmImage = docker.build(armImageTag, "-f ${dockerfileArm} .")
+                    newx86Image = docker.build(x86ImageTag, "-f ${dockerfileX86} .")
                 }
             }
         }
 
-        stage('Push image') {
+        stage('Push images') {
             steps {
                 script {
                     docker.withRegistry(registry, 'docker-hub-creds') {
-                        newImage.push()
-                        newImage.push("latest")
+                        newArmImage.push()
+                        newx86Image.push()
                     }
+                }
+            }
+        }
+
+        stage('Create manifest') {
+            steps {
+                script {
+                    sh "docker manifest create ${name}:latest ${armImageTag} ${x86ImageTag}"
+                }
+            }
+        }
+
+        stage('Push manifest') {
+            steps {
+                script {
+                    sh "docker manifest push ${name}:latest"
                 }
             }
         }
