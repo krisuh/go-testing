@@ -65,7 +65,8 @@ pipeline {
         stage('Remove and prune images') {
             steps {
                 script {
-                    sh "docker image rm ${newImage.id} -f"
+                    sh "docker image rm ${newArmImage.id} -f"
+                    sh "docker image rm ${newx86Image.id} -f"
                     sh "docker image prune -f"
                 }
             }
