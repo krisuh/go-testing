@@ -7,6 +7,9 @@ def x86ImageTag
 
 pipeline {
     agent any
+    environment {
+        DOCKER_CREDS = credentials('docker-hub-creds')
+    }
     stages {
         stage('Clone repository') {
             steps {
@@ -44,6 +47,7 @@ pipeline {
         stage('Create manifest') {
             steps {
                 script {
+                    sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
                     sh "docker manifest create -a ${name}:latest ${armImageTag} ${x86ImageTag}"
                 }
             }
@@ -52,9 +56,8 @@ pipeline {
         stage('Push manifest') {
             steps {
                 script {
-                    docker.withRegistry(registry, 'docker-hub-creds') {
-                        sh "docker manifest push ${name}:latest"
-                    }
+                    sh "docker manifest push ${name}:latest"
+                    sh "docker logout"
                 }
             }
         }
