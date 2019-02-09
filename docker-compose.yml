@@ -16,4 +16,3 @@ services:
       placement:
         constraints:
           - node.labels.location == edge
-          - node.labels.arch == arm
