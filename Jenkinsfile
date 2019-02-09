@@ -33,14 +33,6 @@ pipeline {
             }
         }
 
-        stage('Create manifest') {
-            steps {
-                script {
-                    sh "docker manifest create -a ${name}:latest ${armImageTag} ${x86ImageTag}"
-                }
-            }
-        }
-
         stage('Push images') {
             steps {
                 script {
@@ -48,6 +40,14 @@ pipeline {
                         newArmImage.push()
                         newx86Image.push()
                     }
+                }
+            }
+        }
+
+        stage('Create manifest') {
+            steps {
+                script {
+                    sh "docker manifest create -a ${name}:latest ${armImageTag} ${x86ImageTag}"
                 }
             }
         }
