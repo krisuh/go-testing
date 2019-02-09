@@ -1,5 +1,5 @@
 def registry = 'https://registry.hub.docker.com'
-def name = "tyhjataulu/go-blinker"
+def name = "tyhjataulu/go-edge-api"
 def newArmImage
 def newx86Image
 def armImageTag
