@@ -44,7 +44,7 @@ pipeline {
         stage('Create manifest') {
             steps {
                 script {
-                    sh "docker manifest create ${name}:latest ${armImageTag} ${x86ImageTag}"
+                    sh "docker manifest create -a ${name}:latest ${armImageTag} ${x86ImageTag}"
                 }
             }
         }
