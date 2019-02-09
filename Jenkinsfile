@@ -1,4 +1,4 @@
-def registry = 'https://registry.hub.docker.com'
+def registry = 'https://index.docker.io/v1/'
 def name = "tyhjataulu/go-blinker"
 def newArmImage
 def newx86Image
