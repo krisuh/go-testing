@@ -55,7 +55,7 @@ pipeline {
         stage('Push manifest') {
             steps {
                 script {
-                    sh "docker login --username ${DOCKER_CREDS_USR} --password-stdin ${DOCKER_CREDS_PSW} ${registry}"
+                    sh "docker login ${registry} -u ${DOCKER_CREDS_USR} --password-stdin ${DOCKER_CREDS_PSW}"
                     sh "docker manifest push ${name}:latest"
                     sh "docker logout"
                 }
