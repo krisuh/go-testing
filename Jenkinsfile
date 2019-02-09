@@ -52,7 +52,9 @@ pipeline {
         stage('Push manifest') {
             steps {
                 script {
-                    sh "docker manifest push ${name}:latest"
+                    docker.withRegistry(registry, 'docker-hub-creds') {
+                        sh "docker manifest push ${name}:latest"
+                    }
                 }
             }
         }
