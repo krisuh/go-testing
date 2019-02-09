@@ -47,7 +47,6 @@ pipeline {
         stage('Create manifest') {
             steps {
                 script {
-                    sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
                     sh "docker manifest create -a ${name}:latest ${armImageTag} ${x86ImageTag}"
                 }
             }
@@ -56,6 +55,7 @@ pipeline {
         stage('Push manifest') {
             steps {
                 script {
+                    sh "docker login -u ${DOCKER_CREDS_USR} --password-stdin ${DOCKER_CREDS_PSW}"
                     sh "docker manifest push ${name}:latest"
                     sh "docker logout"
                 }
