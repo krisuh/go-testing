@@ -36,7 +36,7 @@ func GetGreeting(w http.ResponseWriter, r *http.Request) {
 		Message:   "Hello!",
 		Hostname:  h,
 		Name:      "Another Hello!",
-		TestField: "Testing",
+		TestField: "Godzilla",
 	}
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
