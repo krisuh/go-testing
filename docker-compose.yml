@@ -2,7 +2,7 @@ version: '3'
 services:
   edge_service:
     build: .
-    image: tyhjataulu/go-blinker:latest
+    image: tyhjataulu/go-edge-api:latest
     ports:
       - 8080:8080
     privileged: true

@@ -1,5 +1,5 @@
-def registry = 'https://index.docker.io/v1/'
-def name = "tyhjataulu/go-blinker"
+def registry = 'https://registry.hub.docker.com'
+def name = "tyhjataulu/go-edge-api"
 def newArmImage
 def newx86Image
 def armImageTag
@@ -55,7 +55,7 @@ pipeline {
         stage('Push manifest') {
             steps {
                 script {
-                    sh "echo ${DOCKER_CREDS_PSW} | docker login --username=${DOCKER_CREDS_USR} --password-stdin https://index.docker.io/v1/"
+                    sh "echo ${DOCKER_CREDS_PSW} | docker login --username=${DOCKER_CREDS_USR} --password-stdin ${registry}"
                     sh "docker manifest push ${name}:latest"
                     sh "docker logout"
                 }
