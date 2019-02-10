@@ -1,4 +1,4 @@
-def registry = 'https://index.docker.io/v1/'
+def registry = 'https://registry.hub.docker.com'
 def name = "tyhjataulu/go-edge-api"
 def newArmImage
 def newx86Image
@@ -35,7 +35,7 @@ pipeline {
         stage('Push images') {
             steps {
                 script {
-                    docker.withRegistry(registry, 'docker-hub-creds') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
                         newArmImage.push()
                         newx86Image.push()
                     }
