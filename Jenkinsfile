@@ -35,28 +35,10 @@ pipeline {
         stage('Push images') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-creds') {
+                    docker.withRegistry(registry, 'docker-hub-creds') {
                         newArmImage.push()
                         newx86Image.push()
                     }
-                }
-            }
-        }
-
-        stage('Create manifest') {
-            steps {
-                script {
-                    sh "docker manifest create -a ${name}:latest ${armImageTag} ${x86ImageTag}"
-                }
-            }
-        }
-
-        stage('Push manifest') {
-            steps {
-                script {
-                    sh "echo ${DOCKER_CREDS_PSW} | docker login --username=${DOCKER_CREDS_USR} --password-stdin ${registry}"
-                    sh "docker manifest push ${name}:latest"
-                    sh "docker logout"
                 }
             }
         }
