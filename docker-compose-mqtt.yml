@@ -1,0 +1,26 @@
+version: '3'
+services:
+  edge_service:
+    build: .
+    image: tyhjataulu/go-edge-api:latest
+    ports:
+      - 8080:8080
+    privileged: true
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 10M
+      placement:
+        constraints:
+          - node.labels.location == edge
+    networks:
+      - broker
+  mqtt:
+    image: eclipse-mosquitto:latest
+    networks:
+      - broker
+networks:
+  broker:

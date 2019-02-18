@@ -1,8 +1,8 @@
 version: '3'
 services:
-  edge_service:
+  edge_arm:
     build: .
-    image: tyhjataulu/go-edge-api:latest
+    image: tyhjataulu/go-edge-api:arm
     ports:
       - 8080:8080
     privileged: true
@@ -16,3 +16,23 @@ services:
       placement:
         constraints:
           - node.labels.location == edge
+          - node.architecture == armv7l
+  edge_x86:
+    build:
+      context: .
+      dockerfile: Dockerfile.x86
+    image: tyhjataulu/go-edge-api:x86
+    ports:
+      - 8080:8080
+    privileged: true
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 10M
+      placement:
+        constraints:
+          - node.labels.location == edge
+          - node.architecture == x86_64
