@@ -5,6 +5,13 @@ def newx86Image
 def armImageTag
 def x86ImageTag*/
 
+/*def dockerfileArm = 'Dockerfile'
+                    def dockerfileX86 = 'Dockerfile.x86'
+                    armImageTag = "${name}:arm"
+                    x86ImageTag = "${name}:x86"
+                    newArmImage = docker.build(armImageTag, "-f ${dockerfileArm} .")
+                    newx86Image = docker.build(x86ImageTag, "-f ${dockerfileX86} .")*/
+
 pipeline {
     agent any
     stages {
@@ -19,13 +26,7 @@ pipeline {
         stage('Build images') {
             steps {
                 script {
-                    /*def dockerfileArm = 'Dockerfile'
-                    def dockerfileX86 = 'Dockerfile.x86'
-                    armImageTag = "${name}:arm"
-                    x86ImageTag = "${name}:x86"
-                    newArmImage = docker.build(armImageTag, "-f ${dockerfileArm} .")
-                    newx86Image = docker.build(x86ImageTag, "-f ${dockerfileX86} .")*/
-                    sh build-docker-images.sh
+                    bash build-docker-images.sh
                 }
             }
         }
