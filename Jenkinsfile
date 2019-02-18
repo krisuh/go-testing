@@ -13,7 +13,11 @@ def x86ImageTag*/
                     newx86Image = docker.build(x86ImageTag, "-f ${dockerfileX86} .")*/
 
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:latest'
+        }
+    }
     stages {
         /*stage('Clone repository') {
             steps {
