@@ -8,13 +8,13 @@ def x86ImageTag*/
 pipeline {
     agent any
     stages {
-        stage('Clone repository') {
+        /*stage('Clone repository') {
             steps {
                 script {
                     checkout scm
                 }
             }
-        }
+        }*/
 
         stage('Build images') {
             steps {
