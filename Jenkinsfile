@@ -1,15 +1,12 @@
-def registry = 'https://registry.hub.docker.com'
+/*def registry = 'https://registry.hub.docker.com'
 def name = "tyhjataulu/go-edge-api"
 def newArmImage
 def newx86Image
 def armImageTag
-def x86ImageTag
+def x86ImageTag*/
 
 pipeline {
     agent any
-    environment {
-        DOCKER_CREDS = credentials('docker-hub-creds')
-    }
     stages {
         stage('Clone repository') {
             steps {
@@ -47,8 +44,6 @@ pipeline {
         stage('Remove and prune images') {
             steps {
                 script {
-                    sh "docker image rm ${newArmImage.id} -f"
-                    sh "docker image rm ${newx86Image.id} -f"
                     sh "docker image prune -f"
                 }
             }
