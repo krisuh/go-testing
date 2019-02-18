@@ -2,7 +2,7 @@ version: '3'
 services:
   edge_service:
     build: .
-    image: tyhjataulu/go-edge-api:x86
+    image: tyhjataulu/go-edge-api:arm
     ports:
       - 8080:8080
     privileged: true
@@ -16,4 +16,4 @@ services:
       placement:
         constraints:
           - node.labels.location == edge
-          - node.architecture == x86_64
+          - node.architecture == armv7l
