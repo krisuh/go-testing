@@ -15,6 +15,7 @@ type Greeting struct {
 	Hostname  string `json:"hostname"`
 	Name      string `json:"name"`
 	TestField string `json:"testField"`
+	Version   int32  `json:"version"`
 }
 
 func main() {
@@ -37,6 +38,7 @@ func GetGreeting(w http.ResponseWriter, r *http.Request) {
 		Hostname:  h,
 		Name:      "Another Hello!",
 		TestField: "Godzilla",
+		Version:   1,
 	}
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
