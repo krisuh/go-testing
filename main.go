@@ -34,10 +34,10 @@ func GetGreeting(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 	}
 	greeting := Greeting{
-		Message:   "Hello!",
+		Message:   "Message",
 		Hostname:  h,
-		Name:      "Another Hello!",
-		TestField: "Godzilla",
+		Name:      "Name",
+		TestField: "TestField",
 		Version:   1,
 	}
 	w.Header().Add("Content-Type", "application/json")
