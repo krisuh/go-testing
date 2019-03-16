@@ -3,10 +3,10 @@ WORKDIR /go/src/github.com/krisuh/go-testing
 ADD . /go/src/github.com/krisuh/go-testing/
 RUN go get -u github.com/golang/dep/cmd/dep
 RUN dep ensure -v
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o blinker
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o program
 
 
 FROM alpine
 WORKDIR /app
-COPY --from=compiler /go/src/github.com/krisuh/go-testing/blinker /app
-CMD ./blinker
+COPY --from=compiler /go/src/github.com/krisuh/go-testing/program /app
+CMD ./program

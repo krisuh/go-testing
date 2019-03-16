@@ -1,50 +1,37 @@
-/*def registry = 'https://registry.hub.docker.com'
+def registry = 'https://registry.hub.docker.com'
 def name = "tyhjataulu/go-edge-api"
-def newArmImage
-def newx86Image
-def armImageTag
-def x86ImageTag*/
-
-/*def dockerfileArm = 'Dockerfile'
-                    def dockerfileX86 = 'Dockerfile.x86'
-                    armImageTag = "${name}:arm"
-                    x86ImageTag = "${name}:x86"
-                    newArmImage = docker.build(armImageTag, "-f ${dockerfileArm} .")
-                    newx86Image = docker.build(x86ImageTag, "-f ${dockerfileX86} .")*/
+def dockerfile = 'Dockerfile'
+def imageTag = "${name}:latest"
+def newImage
 
 pipeline {
-    agent {
-        docker {
-            image 'docker:latest'
-        }
-    }
+    agent any
     stages {
-        /*stage('Clone repository') {
+        stage('Clone repository') {
             steps {
                 script {
                     checkout scm
                 }
             }
-        }*/
+        }
 
-        stage('Build images') {
+        stage('Build image') {
             steps {
                 script {
-                    sh "bash build-docker-images.sh"
+                    newImage = docker.build(imageTag, "-f ${dockerfile} .")
                 }
             }
         }
 
-        /*stage('Push images') {
+        stage('Push image') {
             steps {
                 script {
                     docker.withRegistry(registry, 'docker-hub-creds') {
-                        newArmImage.push()
-                        newx86Image.push()
+                        newImage.push()
                     }
                 }
             }
-        }*/
+        }
 
         stage('Remove and prune images') {
             steps {
